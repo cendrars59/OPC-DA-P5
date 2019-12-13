@@ -1,22 +1,16 @@
 import mysql.connector
 from mysql.connector import Error
+from Database.Params.db_params import params
 
 
 def connect():
     """ Connect to MySQL database """
     conn = None
     try:
-        conn = mysql.connector.connect(host='localhost',
-                                       database='yolo',
-                                       user='root',
-                                       password='root')
+        conn = mysql.connector.connect(**params)
         if conn.is_connected():
             print('Connected to MySQL database')
             cursor = conn.cursor()
-            query = 'select * from category'
-            cursor.execute(query)
-            for value in cursor:
-                print(value)
 
     except Error as e:
         print(e)
