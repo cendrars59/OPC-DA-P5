@@ -66,5 +66,15 @@ project
 
 ## 2.2 Third part softwares
 
+### 2.2.1 Python version 
+The solution has been developped from 3.7.5 Python version -> see [Release note](https://www.python.org/downloads/release/python-375/)
+
+### 2.2.2 MySQL Python connector 
+In order to access to database from installation. You have to set up the Python MySQL connector 8.0.18. Please find the link to download [here](https://dev.mysql.com/downloads/connector/python/)
+
+### 2.2.3 OpenFoodFacts API
+
+The setting of the OpenFoodFacts is required for the application usage. You can find the setting procedure for Python [here](https://github.com/openfoodfacts/openfoodfacts-python)
+
 
 # 3. Using application 
