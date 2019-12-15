@@ -26,4 +26,4 @@ def feed(type,request,table):
 def feedApp():
     feed(params["store"]["type"],params["store"]["request"],params["store"]["table"])
     feed(params["category"]["type"],params["category"]["request"],params["category"]["table"])
-
+    feed(params["brand"]["type"],params["brand"]["request"],params["brand"]["table"])

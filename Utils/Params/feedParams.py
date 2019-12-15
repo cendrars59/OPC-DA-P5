@@ -14,5 +14,13 @@ params = {
     'type': 'category',
     'table': 'category',
     'request':openfoodfacts.facets.get_categories(),
-  }  
+  },
+
+  'brand': {
+
+    'type': 'brand',
+    'table': 'brand',
+    'request':openfoodfacts.facets.get_brands(),
+  },
+
 }
