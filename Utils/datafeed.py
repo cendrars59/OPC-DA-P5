@@ -26,6 +26,7 @@ def feed(type,request,table):
 def feedApp():
     feed(params["store"]["type"],params["store"]["request"],params["store"]["table"])
 
+<<<<<<< HEAD
 
 
 def FeedCategories():
@@ -47,3 +48,5 @@ def FeedCategories():
     print("Categories feed has been done!")
 
 
+=======
+>>>>>>> MD_Cat
