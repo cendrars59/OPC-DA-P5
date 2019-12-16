@@ -2,25 +2,25 @@
 import openfoodfacts
 
 params = {
-  'store' : {
+    'store': {
 
-  'type': 'store',
-  'table': 'store',
-  'request':openfoodfacts.facets.get_stores(),
-  },
+        'type': 'store',
+        'table': 'store',
+        'request': openfoodfacts.facets.get_stores(),
+    },
 
-  'category': {
+    'category': {
 
-    'type': 'category',
-    'table': 'category',
-    'request':openfoodfacts.facets.get_categories(),
-  },
+        'type': 'category',
+        'table': 'category',
+        'request': openfoodfacts.facets.get_categories(),
+    },
 
-  'brand': {
+    'brand': {
 
-    'type': 'brand',
-    'table': 'brand',
-    'request':openfoodfacts.facets.get_brands(),
-  },
+        'type': 'brand',
+        'table': 'brand',
+        'request': openfoodfacts.facets.get_brands(),
+    },
 
 }
