@@ -206,4 +206,16 @@ SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
 
-select count(*) from brand
+select * from category where code like 'fr:%' and  idCategory between 599 and 700 and is_active = 1
+UPDATE category
+SET is_active=1
+WHERE code LIKE 'fr:%' and  idCategory between 599 and 700
+
+select count(idProduct) from product
+select * from product
+
+delete from product
+
+select * from product_has_store
+select * from product_has_brand
+select * from category_has_product

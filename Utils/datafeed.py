@@ -4,8 +4,7 @@ from Database.dbRessources import connect
 from Utils.Params.feedParams import params
 
 
-def feed(type,request,table):
-    conn = connect()
+def feed(type,request,table,conn):
     queryForCheck = ("SELECT COUNT(*) FROM {0} WHERE code=%s".format(table))
     queryForInserting = ("INSERT INTO {0} (code,name,url) VALUES(%s,%s,%s)".format(table))
     items_list = request
@@ -47,7 +46,7 @@ def insertIntoJunctionTable(dataset,table,dest1,dest2,conn):
         cursorI.close()
 
 
-def feedProducts(con):
+def feedProducts(conn):
 
     product_category = set()
     product_brand = set()
@@ -87,21 +86,24 @@ def feedProducts(con):
 
                 # feeding dataset in order to insert into table store has product 
                 temp_stores = product['stores'].split(',')
-                feedDataSet(productId[0][0],temp_stores,product_store,'store','idStore')
+                feedDataSet(productId[0][0],temp_stores,product_store,'store','idStore',conn)
             
                 # feeding dataset in order to insert into table brand has product
                 temp_brands = product['brands'].split(',')
-                feedDataSet(productId[0][0],temp_brands,product_brand,'brand','idBrand')
+                feedDataSet(productId[0][0],temp_brands,product_brand,'brand','idBrand',conn)
 
     # inserting into the junction table 
-    insertIntoJunctionTable(product_brand,'Product_has_Brand','Product_idProduct','Brand_idBrand')            
-    insertIntoJunctionTable(product_category,'Category_has_Product','Product_idProduct','Category_idCategory')
-    insertIntoJunctionTable(product_store,'Product_has_Store','Product_idProduct','Store_idStore')
+    insertIntoJunctionTable(product_brand,'Product_has_Brand','Product_idProduct','Brand_idBrand',conn)            
+    insertIntoJunctionTable(product_category,'Category_has_Product','Product_idProduct','Category_idCategory',conn)
+    insertIntoJunctionTable(product_store,'Product_has_Store','Product_idProduct','Store_idStore',conn)
+    
 
 
 
 
 def feedApp():
-    #feed(params["store"]["type"],params["store"]["request"],params["store"]["table"])
-    #feed(params["category"]["type"],params["category"]["request"],params["category"]["table"])
-    feed(params["brand"]["type"],params["brand"]["request"],params["brand"]["table"])
+    conn = connect()
+    #feed(params["store"]["type"],params["store"]["request"],params["store"]["table"],conn)
+    #feed(params["category"]["type"],params["category"]["request"],params["category"]["table"],conn)
+    #feed(params["brand"]["type"],params["brand"]["request"],params["brand"]["table"],conn)
+    feedProducts(conn)
