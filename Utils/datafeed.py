@@ -5,21 +5,23 @@ from Utils.Params.feedParams import params
 
 
 def feed(type,request,table):
+    conn = connect()
     queryForCheck = ("SELECT COUNT(*) FROM {0} WHERE code=%s".format(table))
     queryForInserting = ("INSERT INTO {0} (code,name,url) VALUES(%s,%s,%s)".format(table))
-    insertCount = 0
     items_list = request
-    conn = connect()
-    cursor = conn.cursor()
 
-    for item in items_list: 
-        cursor.execute(queryForInserting, (item['id'],item['name'],item['url']))
-        insertCount += 1
-        print('{0} inserted'.format(type))
-        if insertCount == 1000:
+    for item in items_list:
+        cursorCK = conn.cursor()
+        cursorCK.execute(queryForCheck,(item['id'],))
+        Ckresult = cursorCK.fetchall()
+        cursorCK.close() 
+        if int(Ckresult[0][0]) == 0:
+            cursorIn = conn.cursor()
+            cursorIn.execute(queryForInserting, (item['id'],item['name'],item['url']))
             conn.commit()
-            insertCount = 0
-    cursor.close()
+            cursorIn.close()
+            print('{0} inserted'.format(type))
+         
     print("{0} feed has been done!".format(type))
 
 
@@ -100,6 +102,6 @@ def feedProducts(con):
 
 
 def feedApp():
-    feed(params["store"]["type"],params["store"]["request"],params["store"]["table"])
-    feed(params["category"]["type"],params["category"]["request"],params["category"]["table"])
+    #feed(params["store"]["type"],params["store"]["request"],params["store"]["table"])
+    #feed(params["category"]["type"],params["category"]["request"],params["category"]["table"])
     feed(params["brand"]["type"],params["brand"]["request"],params["brand"]["table"])
