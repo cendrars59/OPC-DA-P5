@@ -5,7 +5,7 @@ params = {
   'user': 'root',
   'password': 'root',
   'host': '127.0.0.1',
-  'database': 'openfoodsdb',
+  'database': 'Totor',
   'raise_on_warnings': True
 
 }
