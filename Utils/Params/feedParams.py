@@ -1,26 +1,34 @@
 # -*- coding: Utf-8 -*
-import openfoodfacts
+
 
 params = {
     'store': {
 
         'type': 'store',
         'table': 'store',
-        'request': openfoodfacts.facets.get_stores(),
+        'url': 'https://fr.openfoodfacts.org/products/stores.json'
     },
 
     'category': {
 
         'type': 'category',
         'table': 'category',
-        'request': openfoodfacts.facets.get_categories(),
+        'url': 'https://fr.openfoodfacts.org/products/categories.json'
     },
 
     'brand': {
 
         'type': 'brand',
         'table': 'brand',
-        'request': openfoodfacts.facets.get_brands(),
+        'url': 'https://fr.openfoodfacts.org/products/brands.json'
+    },
+
+    'product': {
+
+        'type': 'product',
+        'table': 'product',
+        'url': 'https://world.openfoodfacts.org/',
+        'headers' : {'User-Agent': 'Cyril-59, Mozilla, Version 5.0'}
     },
 
 }

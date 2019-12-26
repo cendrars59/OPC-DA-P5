@@ -1,22 +1,27 @@
 # -*- coding: Utf-8 -*
-import openfoodfacts
+import requests
+import json
 from Database.dbRessources import connect
 from Utils.Params.feedParams import params
 
 
-def feed(domain, request, table, conn):
+
+def feed(domain, request,table, conn):
     """
 
     """
+    print("{0} feed is starting!".format(domain))
     query_for_check = ("SELECT COUNT(*) FROM {0} WHERE code=%s".format(table))
     query_for_inserting = ("INSERT INTO {0} (code, name, url) VALUES(%s,%s,%s)".format(table))
-    items_list = request
-
+    items_list = request  #Gathering data for api 
+    
+    
     for item in items_list:
         cursor_ck = conn.cursor()
         cursor_ck.execute(query_for_check,(item['id'],))
         ckresult = cursor_ck.fetchall()
         cursor_ck.close()
+        #if the code doesn't already exit, we can proceed to the insert
         if int(ckresult[0][0]) == 0:
             cursor_in = conn.cursor()
             cursor_in.execute(query_for_inserting, (item['id'], item['name'], item['url']))
@@ -59,30 +64,39 @@ def feed_products(conn):
     """
 
     """
+   
+    
     product_category = set()
     product_brand = set()
     product_store = set()
 
-
-    query = ("SELECT idCategory,code FROM category WHERE category.is_active=1")  
+    #Gathering active categories into DB. 
+    query = ("SELECT idCategory,code,name FROM category WHERE category.is_active=1")  
 
     cursor = conn.cursor()
     cursor.execute(query)
     categories = cursor.fetchall()
     cursor.close()
-
+    print("The products loading will be performed for {0} active categories".format(str(len(categories))))
+    print("products loading is starting. It could take a while...Have a break :-) ")
     for category in categories:
-        # for each category, gathering from Open food facts products
-        category_products = openfoodfacts.products.get_by_category(category[1])
-        for product in category_products:
         
-            # Filtering products having only a valid structure and where the label and id are not empty
-            if ('brands' in product and 'stores' in product and 'labels' in product and 'url' in product and
-                    'id' in product and product['labels'] != '' and product['id'] != ''):
+        payload = {'categories': category[1], 'json': 1, 'page_size' : '1000'}
+        response = requests.get(url = params['product']['url'], headers=params['product']['headers'], params = payload)
 
+        products=response.json()
+       
+        
+        # for each active category, gathering from Open food facts products
+        for product in products['products']:
+            # Filtering products having only a valid structure and where the label and id are not empty
+            if ('brands' in product and 'stores' in product and 'product_name' in product and 'url' in product and
+                    'id' in product and product['product_name'] != '' and product['id'] != ''):
+
+                
                 query1 = ("INSERT INTO product (code,label,url) VALUES(%s,%s,%s)") # Inserting the product
                 cursor1 = conn.cursor()
-                cursor1.execute(query1, (product['id'], product['labels'], product['url']))
+                cursor1.execute(query1, (product['id'], product['product_name'], product['url']))
                 conn.commit()
                 cursor1.close()
             
@@ -107,6 +121,8 @@ def feed_products(conn):
     insert_into_junction(product_brand, 'Product_has_Brand', 'Product_idProduct', 'Brand_idBrand', conn)
     insert_into_junction(product_category, 'Category_has_Product', 'Product_idProduct', 'Category_idCategory', conn)
     insert_into_junction(product_store, 'Product_has_Store', 'Product_idProduct', 'Store_idStore', conn)
+
+    print("Products loading is finished")
     
 
 def feed_application():
@@ -114,7 +130,7 @@ def feed_application():
 
     """
     conn = connect()
-    feed(params["store"]["type"], params["store"]["request"], params["store"]["table"], conn)
-    feed(params["category"]["type"], params["category"]["request"], params["category"]["table"], conn)
-    feed(params["brand"]["type"], params["brand"]["request"], params["brand"]["table"], conn)
+    feed(params["store"]["type"], requests.get(params["store"]["url"]).json()['tags'], params["store"]["table"], conn)
+    feed(params["brand"]["type"], requests.get(params["brand"]["url"]).json()['tags'], params["brand"]["table"], conn)
+    feed(params["category"]["type"], requests.get(params["category"]["url"]).json()['tags'], params["category"]["table"], conn)
     feed_products(conn)
