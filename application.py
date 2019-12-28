@@ -1,6 +1,7 @@
 # -*- coding: Utf-8 -*
 from Database.dbRessources import connect
 from Database.dbRessources import create_database
+from Utils.datafeed import feed_application
 from mysql.connector import errorcode
 
 
@@ -22,6 +23,7 @@ def main():
         print('settings done')
 
     print("yolo")
+    feed_application(connection)
 
 if __name__ == '__main__':
     main()
