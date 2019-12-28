@@ -2,10 +2,11 @@
 
 params = {
 
-  'user': 'root',
-  'password': 'root',
-  'host': '127.0.0.1',
-  'database': 'Totor',
+  'user': "root",
+  'password': "root",
+  'host': "localhost",
+  'database': "Elvis",
+  'port':"3306",
   'raise_on_warnings': True
 
 }
