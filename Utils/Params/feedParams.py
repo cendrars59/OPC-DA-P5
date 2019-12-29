@@ -27,8 +27,10 @@ params = {
 
         'type': 'product',
         'table': 'product',
-        'url': 'https://world.openfoodfacts.org/',
-        'headers' : {'User-Agent': 'Cyril-59, Mozilla, Version 5.0'}
-    },
+        'url': 'https://fr.openfoodfacts.org/cgi/search.pl?',
+        'headers' : {'User-Agent': 'Cyril-59, Mozilla, Version 5.0'},
+    }
+
+    
 
 }

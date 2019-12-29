@@ -21,13 +21,13 @@ def feed(domain, request,table, conn):
         cursor_ck.execute(query_for_check,(item['id'],))
         ckresult = cursor_ck.fetchall()
         cursor_ck.close()
-        #if the code doesn't already exit, we can proceed to the insert
+        #if the code doesn't already exit, we can proceed to insert
         if int(ckresult[0][0]) == 0:
             cursor_in = conn.cursor()
             cursor_in.execute(query_for_inserting, (item['id'], item['name'], item['url']))
             conn.commit()
             cursor_in.close()
-            print('{0} inserted'.format(domain))
+
          
     print("{0} feed has been done!".format(domain))
 
@@ -71,7 +71,7 @@ def feed_products(conn):
     product_store = set()
 
     #Gathering active categories into DB. 
-    query = ("SELECT idCategory,code,name FROM category WHERE category.is_active=1")  
+    query = ("SELECT idCategory,code,name FROM category WHERE is_active = 1")  
 
     cursor = conn.cursor()
     cursor.execute(query)
@@ -80,42 +80,60 @@ def feed_products(conn):
     print("The products loading will be performed for {0} active categories".format(str(len(categories))))
     print("products loading is starting. It could take a while...Have a break :-) ")
     for category in categories:
-        
-        payload = {'categories': category[1], 'json': 1, 'page_size' : '1000'}
-        response = requests.get(url = params['product']['url'], headers=params['product']['headers'], params = payload)
+        print('loading products for the category : {}'.format(category[2]))
+        payload = {
+            "search_terms2":category[2],
+            "search_tag":"categories",
+            "sort_by":"unique_scans_n",
+            "page" : 1,
+            "page_size" : 1000,
+            "action" : "process",
+            "json": 1}
+       
+        response = requests.get(params['product']['url'],params = payload ,headers=params['product']['headers'] )
 
         products=response.json()
        
         
         # for each active category, gathering from Open food facts products
         for product in products['products']:
-            # Filtering products having only a valid structure and where the label and id are not empty
-            if ('brands' in product and 'stores' in product and 'product_name' in product and 'url' in product and
-                    'id' in product and product['product_name'] != '' and product['id'] != ''):
+            #verify if the product already exists into the database the search is by open fact food id <-> code into db
+            if 'id' in product:
+            
+                query_for_check = ("SELECT COUNT(*) FROM {0} WHERE code={1}".format('product', product['id']))
+                cursor_ck = conn.cursor()
+                cursor_ck.execute(query_for_check)
+                ckresult = cursor_ck.fetchall()
+                cursor_ck.close()
+                # Filtering products having only a valid structure and where the label and id are not empty and 
+                # the product doesn't exist into the database.
+                if ('brands' in product and 'stores' in product and 'product_name' in product and 'url' in product and
+                 product['product_name'] != '' and product['id'] != '' and ckresult[0][0] == 0):
 
                 
-                query1 = ("INSERT INTO product (code,label,url) VALUES(%s,%s,%s)") # Inserting the product
-                cursor1 = conn.cursor()
-                cursor1.execute(query1, (product['id'], product['product_name'], product['url']))
-                conn.commit()
-                cursor1.close()
+                    query1 = ("INSERT INTO product (code,label,url) VALUES(%s,%s,%s)") # Inserting the product
+                    cursor1 = conn.cursor()
+                    cursor1.execute(query1, (product['id'], product['product_name'], product['url']))
+                    conn.commit()
+                    cursor1.close()
             
-                query2 = ("SELECT MAX(idProduct) FROM product")  # get the product id just inserted
-                cursor2 = conn.cursor()
-                cursor2.execute(query2)
-                product_id = cursor2.fetchall()
-                cursor2.close()
+                    query2 = ("SELECT MAX(idProduct) FROM product where code = {0}".format(product['id']))  # get the product id just inserted
+                    cursor2 = conn.cursor()
+                    cursor2.execute(query2)
+                    product_id = cursor2.fetchall()
+                    cursor2.close()
+                    print(product_id[0][0])
 
-                # feeding dataset in order to insert into table product has category 
-                product_category.add((product_id[0][0], category[0]))
+                    # feeding dataset in order to insert into table product has category 
+                    product_category.add((product_id[0][0], category[0]))
 
-                # feeding dataset in order to insert into table store has product 
-                temp_stores = product['stores'].split(',')
-                feed_data_set(product_id[0][0], temp_stores, product_store, 'store', 'idStore', conn)
+                    # feeding dataset in order to insert into table store has product 
+                    temp_stores = product['stores'].split(',')
+                    feed_data_set(product_id[0][0], temp_stores, product_store, 'store', 'idStore', conn)
             
-                # feeding dataset in order to insert into table brand has product
-                temp_brands = product['brands'].split(',')
-                feed_data_set(product_id[0][0], temp_brands, product_brand, 'brand', 'idBrand', conn)
+                    # feeding dataset in order to insert into table brand has product
+                    temp_brands = product['brands'].split(',')
+                    feed_data_set(product_id[0][0], temp_brands, product_brand, 'brand', 'idBrand', conn)
 
     # inserting into the junction table 
     insert_into_junction(product_brand, 'Product_has_Brand', 'Product_idProduct', 'Brand_idBrand', conn)
@@ -129,7 +147,7 @@ def feed_application(conn):
     """
 
     """
-    feed(params["store"]["type"], requests.get(params["store"]["url"]).json()['tags'], params["store"]["table"], conn)
-    feed(params["brand"]["type"], requests.get(params["brand"]["url"]).json()['tags'], params["brand"]["table"], conn)
-    feed(params["category"]["type"], requests.get(params["category"]["url"]).json()['tags'], params["category"]["table"], conn)
-    #feed_products(conn)
+    #feed(params["store"]["type"], requests.get(params["store"]["url"]).json()['tags'], params["store"]["table"], conn)
+    #feed(params["brand"]["type"], requests.get(params["brand"]["url"]).json()['tags'], params["brand"]["table"], conn)
+    #feed(params["category"]["type"], requests.get(params["category"]["url"]).json()['tags'], params["category"]["table"], conn)
+    feed_products(conn)
