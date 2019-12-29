@@ -26,7 +26,7 @@ The user then has the possibility to save the result in the database.
 * If the user enters a character that is not a number, the program must repeat the question,
 * The research must be carried out on a MySql database.
 
-# 2. Setting 
+# 2. Project structure 
 
 ## 2.1 DataBase
 

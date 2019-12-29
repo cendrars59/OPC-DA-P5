@@ -1,5 +1,5 @@
 # -*- coding: Utf-8 -*
-
+# Required parameters to perform the feeding of th database
 
 params = {
     'store': {
@@ -28,7 +28,7 @@ params = {
         'type': 'product',
         'table': 'product',
         'url': 'https://fr.openfoodfacts.org/cgi/search.pl?',
-        'headers' : {'User-Agent': 'Cyril-59, Mozilla, Version 5.0'},
+        'headers': {'User-Agent': 'Cyril-59, Mozilla, Version 1.0'},
     }
 
     

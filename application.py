@@ -3,11 +3,6 @@ from Database.dbRessources import connect
 from Database.dbRessources import create_database
 from Utils.datafeed import feed_application
 from mysql.connector import errorcode
-from Utils.Params.feedParams import params
-from os import system
-
-
-
 
 
 def main():
@@ -25,8 +20,7 @@ def main():
         print('database creation & feed done')
     feed_application(connection)
     print('Yolo')
-    
-    
+
 
 if __name__ == '__main__':
     main()
