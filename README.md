@@ -26,7 +26,7 @@ The user then has the possibility to save the result in the database.
 * If the user enters a character that is not a number, the program must repeat the question,
 * The research must be carried out on a MySql database.
 
-# 2. Project structure 
+# 2. Project structure & settings
 
 ## 2.1 DataBase
 
@@ -36,7 +36,8 @@ The used database for this project is MySQL community server edition 8.0.18. You
 According your O.S. follow the setup guide provided by the editor. 
 
 ### 2.1.2 Physical Schema
-You can review the physical schema located into the following directory 
+You can review the physical schema located into the following directory. No need to use for creation. The creation will be done at the first use of the application.
+ 
 
 ```
 project
@@ -53,6 +54,7 @@ The schema can be reviewed with MySQL Workbench. Link to install it [here](https
 ### 2.1.3 Database script
 
 The database script has been made for MySQL exclusively. You can find the creation script as described here under. 
+No need to use for creation. The creation will be done at the first use of the application.
 
 ```
 project
@@ -64,10 +66,10 @@ project
 
 ```
 
-## 2.2 Third part softwares
+## 2.2 Third part software
 
 ### 2.2.1 Python version 
-The solution has been developped from 3.7.5 Python version -> see [Release note](https://www.python.org/downloads/release/python-375/)
+The solution has been developed from 3.7.5 Python version -> see [Release note](https://www.python.org/downloads/release/python-375/)
 
 ### 2.2.2 MySQL Python connector 
 In order to access to database from installation. You have to set up the Python MySQL connector 8.0.18. Please find the link to download [here](https://dev.mysql.com/downloads/connector/python/)
@@ -75,6 +77,11 @@ In order to access to database from installation. You have to set up the Python 
 ### 2.2.3 OpenFoodFacts API
 
 The setting of the OpenFoodFacts is required for the application usage. You can find the setting procedure for Python [here](https://github.com/openfoodfacts/openfoodfacts-python)
+See payload configuration section.
 
+## 2.3 System configuration
+---- 
 
 # 3. Using application 
+
+## 3.1 Application initialization

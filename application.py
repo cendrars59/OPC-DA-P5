@@ -3,6 +3,9 @@ from Database.dbRessources import connect
 from Database.dbRessources import create_database
 from Utils.datafeed import feed_application
 from mysql.connector import errorcode
+from Models import category
+from Models import product
+from Views import display
 
 
 def main():
@@ -18,8 +21,25 @@ def main():
         connection = connect()
         feed_application(connection) 
         print('database creation & feed done')
-    feed_application(connection)
-    print('Yolo')
+    list_of_cat = category.get_active_categories(connection)
+    list_of_id = []
+    for cat in list_of_cat:
+        list_of_id.append(str(cat[0]))
+    display.display_categories_list(list_of_cat)
+    selected = False
+    while not selected:
+        choice = input('Enter the category id in order to access to the list of products belonging to category:   ')
+        if choice in list_of_id:
+            selected = True
+
+    cat_products = product.get_products_by_category(connection, int(choice))
+    display.display_category_products(cat_products)
+
+    selected = False
+    while not selected:
+        choice = input('Enter the product id in order to access to the details of a product:   ')
+        if choice in list_of_id:
+            selected = True
 
 
 if __name__ == '__main__':

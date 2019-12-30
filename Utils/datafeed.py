@@ -112,13 +112,18 @@ def feed_products(conn):
                 ckresult = cursor_ck.fetchall()
                 cursor_ck.close()
                 # Filtering products having only a valid structure and where the label and id are not empty and 
-                # the product doesn't exist into the database.
-                if ('brands' in product and 'stores' in product and 'product_name' in product and 'url' in product and
-                        product['product_name'] != '' and product['id'] != '' and ckresult[0][0] == 0):
+                # the product doesn't exist into the database and the grade level is not empty.
+                if ('brands' in product and 'stores' in product and 'product_name' in product and 'url' in product
+                        and 'ingredients_text' in product and 'nutrition_grade_fr' in product and 'quantity' in product
+                        and product['product_name'] != '' and product['id'] != ''
+                        and product['nutrition_grade_fr'] != '' and ckresult[0][0] == 0):
 
-                    query1 = "INSERT INTO product (code,label,url) VALUES(%s,%s,%s)" # Inserting the product
+                    query1 = "INSERT INTO product (code, label, url, ingredients_text, nutrition_grade_fr, quantity)" \
+                             " VALUES(%s,%s,%s,%s,%s,%s)"  # Inserting the product
                     cursor1 = conn.cursor()
-                    cursor1.execute(query1, (product['id'], product['product_name'], product['url']))
+                    cursor1.execute(query1, (product['id'], product['product_name'], product['url'],
+                                             product['ingredients_text'], product['nutrition_grade_fr'],
+                                             product['quantity']))
                     conn.commit()
                     cursor1.close()
 
@@ -128,16 +133,13 @@ def feed_products(conn):
                     cursor2.execute(query2)
                     product_id = cursor2.fetchall()
                     cursor2.close()
-                    print(product_id[0][0])
 
                     # feeding dataset in order to insert into table product has category
                     product_category.add((product_id[0][0], category[0]))
-                    print(product_category)
 
                     # feeding dataset in order to insert into table store has product
                     temp_stores = product['stores'].split(',')
                     feed_data_set(product_id[0][0], temp_stores, product_store, 'store', 'idStore', conn)
-                    print(product_store)
 
                     # feeding dataset in order to insert into table brand has product
                     temp_brands = product['brands'].split(',')
@@ -161,7 +163,8 @@ def feed_application(conn):
     - and the junction tables
     conn: object of type connection
     """
-    #feed(params["store"]["type"], requests.get(params["store"]["url"]).json()['tags'], params["store"]["table"], conn)
-    #feed(params["brand"]["type"], requests.get(params["brand"]["url"]).json()['tags'], params["brand"]["table"], conn)
-    #feed(params["category"]["type"], requests.get(params["category"]["url"]).json()['tags'], params["category"]["table"], conn)
+    feed(params["store"]["type"], requests.get(params["store"]["url"]).json()['tags'], params["store"]["table"], conn)
+    feed(params["brand"]["type"], requests.get(params["brand"]["url"]).json()['tags'], params["brand"]["table"], conn)
+    feed(params["category"]["type"], requests.get(params["category"]["url"]).json()['tags'], params["category"]["table"]
+         , conn)
     feed_products(conn)
