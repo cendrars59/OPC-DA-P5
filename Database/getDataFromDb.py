@@ -46,3 +46,88 @@ def get_products_by_category(conn, category_id):
     products_data = cursor.fetchall()
     cursor.close()
     return products_data
+
+
+def get_product_stores(conn, id):
+    """
+    function to retrieve the stores associated to a product
+    """
+    query = """
+    SELECT
+
+       s.code,
+       s.name,
+       s.url
+
+
+
+    FROM product_has_store
+    INNER JOIN store s ON product_has_store.Store_idStore = s.idStore
+
+    WHERE product_has_store.Product_idProduct = {0}
+
+
+    """.format(id)
+    cursor = conn.cursor()
+    cursor.execute(query)
+    products_stores = cursor.fetchall()
+    cursor.close()
+    return products_stores
+
+
+def get_product_brands(conn, id):
+    """
+    function to retrieve the brands associated to a product
+    """
+    query = """
+    SELECT
+
+       b.code,
+       b.name,
+       b.url
+
+
+
+    FROM product_has_brand
+    INNER JOIN brand b ON product_has_brand.Brand_idBrand = b.idBrand
+
+    WHERE product_has_brand.Product_idProduct = {0}
+
+
+
+    """.format(id)
+    cursor = conn.cursor()
+    cursor.execute(query)
+    product_brands = cursor.fetchall()
+    cursor.close()
+    return product_brands
+
+
+def get_product(conn, id):
+
+    """
+    function to retrieve the brands associated to a product
+    """
+    query = """
+       SELECT
+            p.idProduct,
+            p.code,
+            p.label,
+            p.url,
+            p.is_active,
+            p.ingredients_text,
+            p.nutrition_grade_fr,
+            p.quantity
+
+        FROM product p
+
+
+        WHERE idProduct = {0}
+
+
+        """.format(id)
+    cursor = conn.cursor()
+    cursor.execute(query)
+    product = cursor.fetchall()
+    cursor.close()
+    return product

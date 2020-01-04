@@ -3,7 +3,8 @@ from Database.getDataFromDb import get_products_by_category
 
 class Product:
 
-    def __init__(self, id, code, label, url, is_active, ingredients_text, nutrition_grade_fr, quantity):
+    def __init__(self, id, code, label, url, is_active, ingredients_text, nutrition_grade_fr, quantity,
+                 list_brands=None, list_stores=None):
         """
         Function to create product object
         """
@@ -15,8 +16,8 @@ class Product:
         self.ingredients = ingredients_text
         self.nutrition_grade = nutrition_grade_fr
         self.qty = quantity
-        self.brands = None
-        self.stores = None
+        self.brands = list_brands
+        self.stores = list_stores
 
     @classmethod
     def get_products_by_cat(cls, conn, category):
