@@ -1,9 +1,11 @@
+# -*- coding: Utf-8 -*
+# file managing the displays related to the products
+
 def display_detailed_product(product, recommanded_products):
     """
     Function to display the detailed view of a product
-    taking as argument
-    product : type product
-
+    :param product: product. Type product
+    :param recommanded_products: list of products
     """
 
     print("""
@@ -48,4 +50,11 @@ def display_detailed_product(product, recommanded_products):
         """)
 
     for product in recommanded_products:
-        print(""" id : {0} | nutrition score : {3}  | label : {1} | url : {2}     """.format(product[0], product[1], product[2], product[3]))
+        print(""" id : {0} | nutrition score : {3}  | label : {1} | url : {2}     """.format(product[0], product[1],
+                                                                                             product[2], product[3]))
+
+    print("""
+    
+    
+    
+    """)

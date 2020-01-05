@@ -7,7 +7,18 @@ class Product:
                  list_brands=None, list_stores=None):
         """
         Function to create product object
+        :param id: Type integer
+        :param code: Type string
+        :param label: Type string
+        :param url: Type string
+        :param is_active: Type integer
+        :param ingredients_text: Type string
+        :param nutrition_grade_fr: Type string
+        :param quantity: Type string
+        :param list_brands: Type list
+        :param list_stores: Type list
         """
+
         self.id = id
         self.code = code
         self.label = label
@@ -23,6 +34,8 @@ class Product:
     def get_products_by_cat(cls, conn, category):
         """
         Function to get the products information according a given category
+        :param conn: Object of type connection
+        :param category: category. Type category
         """
 
         products_data = get_products_by_category(conn, category.id)

@@ -6,10 +6,10 @@ from Utils.Params.feedParams import params
 def feed(domain, request, table, conn):
     """
     Generic Function to feed the masters data -> Store , Brand, Category
-    conn: object of type connection
-    domain : object of type string . type of import
-    table : string. destination table
-    request : string. API request to gather master data
+    :param conn: object of type connection
+    :param domain: object of type string . type of import
+    :param request: request to get the master data .Type string
+    :param table: Type string . table name to request into
     """
     print("{0} feed is starting!".format(domain))
     query_for_check = ("SELECT COUNT(*) FROM {0} WHERE code=%s".format(table))
@@ -34,10 +34,12 @@ def feed(domain, request, table, conn):
 def feed_data_set(product_id, items_list, data_set, ref_table, id_ref_table, conn):
     """
     Generic Function to feed the data set used for feed the junction table
-    conn: object of type connection
-    data_set : object of type set
-    table : string destination table
-    dest 1 & 1 : string fields to insert
+    :param conn: object of type connection
+    :param product_id: product id. Type integer
+    :param data_set: set of data to insert into ref table. Type set
+    :param ref_table: destination table to insert. Type string
+    :param items_list: potentials items to filter. Type list
+    :param id_ref_table: Type integer
     """
     for item in items_list:
         if item != '':
@@ -54,10 +56,11 @@ def feed_data_set(product_id, items_list, data_set, ref_table, id_ref_table, con
 def insert_into_junction(data_set, table, dest1, dest2, conn):
     """
     Generic Function to feed the junction tables
-    conn: object of type connection
-    data_set : object of type set
-    table : string destination table
-    dest 1 & 1 : string fields to insert
+    :param conn: object of type connection
+    :param data_set: object of type set
+    :param table: string destination table
+    :param dest1: string fields to insert
+    :param dest2: string fields to insert
     """
     for item in data_set:
         query_i = ("INSERT INTO {0} ({1},{2}) VALUES(%s,%s)".format(table, dest1, dest2))  # Inserting into the table
@@ -70,7 +73,7 @@ def insert_into_junction(data_set, table, dest1, dest2, conn):
 def feed_products(conn):
     """
     Function to feed the products into the database according the category
-    conn: object of type connection
+    :param conn: object of type connection
     """
 
     product_category = set()
@@ -161,7 +164,7 @@ def feed_application(conn):
     - Store
     - Brand
     - and the junction tables
-    conn: object of type connection
+    :param conn: object of type connection
     """
     feed(params["store"]["type"], requests.get(params["store"]["url"]).json()['tags'], params["store"]["table"], conn)
     feed(params["brand"]["type"], requests.get(params["brand"]["url"]).json()['tags'], params["brand"]["table"], conn)

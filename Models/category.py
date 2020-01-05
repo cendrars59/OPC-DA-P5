@@ -5,12 +5,12 @@ class Category:
     def __init__(self, id, code, label, url):
         """
         Function to create category object
-        id : type int . category id into db
-        code : type string .
-        label : type string .
-        url : type string .
-
+        :param id: type int . category id into db
+        :param code: type string .
+        :param label: type string .
+        :param url: type string .
         """
+
         self.id = id
         self.code = code
         self.label = label
@@ -21,6 +21,7 @@ class Category:
     def get_active_categories(cls, conn):
         """
         Function to gather the active categories
+        :param conn: Object of type connection
         """
         active_category_list = []
         gathered_data = get_active_categories(conn)
