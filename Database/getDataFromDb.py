@@ -2,10 +2,6 @@
 # Package in order to manage
 # - the connection to the database and gathering data according different kinds of requests
 
-import mysql.connector
-from os import system
-from mysql.connector import errorcode
-
 
 def get_active_categories(conn):
     """
@@ -131,3 +127,48 @@ def get_product(conn, id):
     product = cursor.fetchall()
     cursor.close()
     return product
+
+
+def get_nutrition_grade_by_category(conn, cat_id):
+    """
+       function to retrieve the brands associated to a product
+    """
+    query = """
+    SELECT
+        DISTINCT nutrition_grade_fr
+    FROM category_has_product
+        INNER JOIN product p on category_has_product.Product_idProduct = p.idProduct
+    WHERE Category_idCategory = {0}
+    ORDER BY nutrition_grade_fr ASC
+
+
+           """.format(cat_id)
+    cursor = conn.cursor()
+    cursor.execute(query)
+    nutrition_grades = cursor.fetchall()
+    cursor.close()
+    return nutrition_grades
+
+
+def get_products_by_nut_grade_and_cat(conn, cat_id, grades_list):
+    """
+           function to retrieve the brands associated to a product
+        """
+    query = """
+    SELECT
+        p.idProduct,
+        p.label,
+        p.url,
+        p.nutrition_grade_fr
+    FROM category_has_product
+        INNER JOIN product p on category_has_product.Product_idProduct = p.idProduct
+    WHERE Category_idCategory = {0} and p.nutrition_grade_fr IN {1}
+
+
+               """.format(cat_id, grades_list)
+    cursor = conn.cursor()
+    cursor.execute(query)
+    nutrition_grades = cursor.fetchall()
+    cursor.close()
+    return nutrition_grades
+

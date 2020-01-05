@@ -1,4 +1,4 @@
-def display_detailed_product(product):
+def display_detailed_product(product, recommanded_products):
     """
     Function to display the detailed view of a product
     taking as argument
@@ -7,7 +7,8 @@ def display_detailed_product(product):
     """
 
     print("""
-    ----------------------------------------------------------------------------------------------
+    -------------------------------------------------------------------------------------------------------------------
+    ------------------------------------------- Product detailed view -------------------------------------------------
     id : {0}
     code : {1}
     label : {2}
@@ -45,3 +46,6 @@ def display_detailed_product(product):
         --------------------------------------------Recommanded products-----------------------------------------------
 
         """)
+
+    for product in recommanded_products:
+        print(""" id : {0} | nutrition score : {3}  | label : {1} | url : {2}     """.format(product[0], product[1], product[2], product[3]))
