@@ -167,3 +167,33 @@ def get_products_by_nut_grade_and_cat(conn, cat_id, grades_list):
     cursor.close()
     return nutrition_grades
 
+
+def get_user(conn, login):
+    """
+    function to verify if the user exists into the DB.
+    :param conn: DB connection type
+    :param login: user login. Type string
+    """
+    query = "SELECT name FROM user WHERE name = %s"
+    cursor = conn.cursor()
+    cursor.execute(query, (login,))
+    user = cursor.fetchall()
+    cursor.close()
+    return user
+
+def create_user(conn, login):
+    """
+        function to verify if the user exists into the DB.
+        :param conn: DB connection type
+        :param login: user login. Type string
+        """
+    query = "INSERT INTO user (name) values (%s)"
+    cursor = conn.cursor()
+    cursor.execute(query, (login,))
+    conn.commit()
+    cursor.close()
+
+
+
+
+

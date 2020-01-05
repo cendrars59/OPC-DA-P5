@@ -16,9 +16,10 @@ from Views import product_view
 def main():
     # Access to database to access to the data
     connection = connect()
-    view_categories = True
+    view_categories = False
     view_products = False
     view_detail = False
+    view_search = False
     is_running = True
 
     if connection == errorcode.ER_ACCESS_DENIED_ERROR:
@@ -33,7 +34,45 @@ def main():
         feed_application(connection) 
         print('database creation & feed done')
 
+    credential_validated = False
+    who = input('Are you a new user ? Type y for Yes or n for No ')
+    if who == 'y':
+        login_exist = False
+        while not login_exist:
+            login = input('enter your login ').lower()
+            user = get_user(connection, login)
+            if len(user) == 1:
+                print('login successful')
+                credential_validated = True
+                login_exist = True
+            else:
+                print("user doesn't exist")
+    elif who == 'n':
+        login_created = False
+        while not login_created:
+            login = input('enter a new login ').lower()
+            user = get_user(connection, login)
+            if len(user) == 0:
+                create_user(connection,login)
+                print('user created')
+                credential_validated = True
+                login_created = True
+            else:
+                print('user already exists, choose an other login')
+
+
+
     while is_running:
+
+        menu_selection = input("""
+        enter se to access to the search history 
+        enter c to access to the category
+        """)
+
+        if menu_selection == 'c':
+            view_categories = True
+
+
         # Display of the list of categories
         if view_categories:
             list_of_cat = category.get_active_categories(connection)
@@ -104,7 +143,7 @@ def main():
                 ended = False
                 while not ended:
                     decision = input(
-                        'Type f to finish or l to go to the products list or  c to go to the categories page:  ')
+                        'Type f to finish or l to go to the products or c to go to the categories or s to save:  ')
                     if decision == 'c':
                         view_products = False
                         view_categories = True
@@ -118,6 +157,8 @@ def main():
                     elif decision == 'f':
                         is_running = False
                         ended = True
+                    elif decision == 's':
+                        pass
 
 
 if __name__ == '__main__':
