@@ -20,6 +20,7 @@ def main():
     view_products = False
     view_detail = False
     view_search = False
+    view_main_menu = False
     is_running = True
 
     if connection == errorcode.ER_ACCESS_DENIED_ERROR:
@@ -43,6 +44,7 @@ def main():
             user = get_user(connection, login)
             if len(user) == 1:
                 print('login successful')
+                view_main_menu = True
                 credential_validated = True
                 login_exist = True
             else:
@@ -62,13 +64,46 @@ def main():
 
     while is_running:
 
-        menu_selection = input("""
-        enter se to access to the search history 
-        enter c to access to the category
-        """)
+        if view_main_menu:
+            menu_selection = input("""
+        
+            Menu selection 
+        
+            enter se to access to the search history 
+            enter c to access to the category:  """)
 
-        if menu_selection == 'c':
-            view_categories = True
+            if menu_selection == 'c':
+                view_categories = True
+                view_search = False
+                view_main_menu = False
+            elif menu_selection == 'se':
+                view_search = True
+                view_categories = False
+                view_main_menu = False
+
+        if view_search:
+            print(get_user_search(connection, user[0][0]))
+            decision = input("""
+                                'Type
+                                 - f to finish 
+                                 - c to go to the categories
+                                 - m to main menu:      """
+                             )
+            if decision == 'c':
+                view_products = False
+                view_categories = True
+                view_main_menu = False
+            elif decision == 'l':
+                view_search = False
+                view_categories = False
+                view_main_menu = False
+            elif decision == 'm':
+                view_search = False
+                view_categories = False
+                view_main_menu = True
+            elif decision == 'f':
+                is_running = False
+
 
         # Display of the list of categories
         if view_categories:
@@ -139,17 +174,31 @@ def main():
 
                 ended = False
                 while not ended:
-                    decision = input(
-                        'Type f to finish or l to go to the products or c to go to the categories or s to save:  ')
+                    decision = input("""
+                    'Type
+                     - f to finish 
+                     - l to go to the products
+                     - c to go to the categories
+                     - s to save
+                     - m to main menu:      """
+                        )
                     if decision == 'c':
                         view_products = False
                         view_categories = True
                         view_detail = False
+                        view_main_menu = False
                         ended = True
                     elif decision == 'l':
                         view_products = True
                         view_categories = False
                         view_detail = False
+                        view_main_menu = False
+                        ended = True
+                    elif decision == 'm':
+                        view_products = False
+                        view_categories = False
+                        view_detail = False
+                        view_main_menu = True
                         ended = True
                     elif decision == 'f':
                         is_running = False

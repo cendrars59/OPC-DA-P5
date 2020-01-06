@@ -201,7 +201,6 @@ def create_user_search(conn, cat_id, prod_id, user_id):
     :param conn: DB connection type
     :param cat_id: category id. Type integer
     :param prod_id: category id. Type integer
-    :param prod_id: product id. Type integer
     :param user_id: user id. Type integer
     """
     query = "INSERT INTO user_search (Product_idProduct, Category_idCategory, User_idUser,Created)" \
@@ -211,6 +210,33 @@ def create_user_search(conn, cat_id, prod_id, user_id):
     conn.commit()
     cursor.close()
 
+
+def get_user_search(conn, user_id):
+    """
+    :param conn: DB connection type
+    :param user_id: user id. Type integer
+    """
+    query = """
+    SELECT
+    p.label,
+    c.name,
+    u.name,
+    us.Created
+
+    FROM user_search us
+        INNER JOIN category c ON us.Category_idCategory = c.idCategory
+        INNER JOIN product p ON us.Product_idProduct = p.idProduct
+        INNER JOIN user u ON us.User_idUser = u.idUser
+    WHERE us.User_idUser = {0}
+    GROUP BY c.name
+    ORDER BY us.Created DESC
+    
+    """.format(user_id)
+    cursor = conn.cursor()
+    cursor.execute(query)
+    searches = cursor.fetchall()
+    cursor.close()
+    return searches
 
 
 
