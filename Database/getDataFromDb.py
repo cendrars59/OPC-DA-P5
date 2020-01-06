@@ -1,6 +1,7 @@
 # -*- coding: Utf-8 -*
 # Package in order to manage
 # - the connection to the database and gathering data according different kinds of requests
+from datetime import date
 
 
 def get_active_categories(conn):
@@ -174,12 +175,13 @@ def get_user(conn, login):
     :param conn: DB connection type
     :param login: user login. Type string
     """
-    query = "SELECT name FROM user WHERE name = %s"
+    query = "SELECT * FROM user WHERE name = %s"
     cursor = conn.cursor()
     cursor.execute(query, (login,))
     user = cursor.fetchall()
     cursor.close()
     return user
+
 
 def create_user(conn, login):
     """
@@ -192,6 +194,23 @@ def create_user(conn, login):
     cursor.execute(query, (login,))
     conn.commit()
     cursor.close()
+
+
+def create_user_search(conn, cat_id, prod_id, user_id):
+    """
+    :param conn: DB connection type
+    :param cat_id: category id. Type integer
+    :param prod_id: category id. Type integer
+    :param prod_id: product id. Type integer
+    :param user_id: user id. Type integer
+    """
+    query = "INSERT INTO user_search (Product_idProduct, Category_idCategory, User_idUser,Created)" \
+            " VALUES(%s,%s,%s,%s)"  # Inserting the search
+    cursor = conn.cursor()
+    cursor.execute(query, (prod_id, cat_id, user_id, date.today()))
+    conn.commit()
+    cursor.close()
+
 
 
 

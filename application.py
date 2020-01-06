@@ -33,9 +33,9 @@ def main():
         connection = connect()
         feed_application(connection) 
         print('database creation & feed done')
-
+    user = None
     credential_validated = False
-    who = input('Are you a new user ? Type y for Yes or n for No ')
+    who = input('Are you a known user ? Type y for Yes or n for No ')
     if who == 'y':
         login_exist = False
         while not login_exist:
@@ -60,8 +60,6 @@ def main():
             else:
                 print('user already exists, choose an other login')
 
-
-
     while is_running:
 
         menu_selection = input("""
@@ -71,7 +69,6 @@ def main():
 
         if menu_selection == 'c':
             view_categories = True
-
 
         # Display of the list of categories
         if view_categories:
@@ -158,7 +155,7 @@ def main():
                         is_running = False
                         ended = True
                     elif decision == 's':
-                        pass
+                        create_user_search(connection, choice, product_choice, user[0][0])
 
 
 if __name__ == '__main__':
