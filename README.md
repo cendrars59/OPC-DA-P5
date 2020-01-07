@@ -116,7 +116,7 @@ The payload has to be configured in order to loop up the product for each catego
 - Display the list of categories 
 - Once a category has been selected, display the list of products into 
 - Once a product has been selected, display the detailed view of the product. on the detailed
-view display the list of recommanded products according the nutrition grade. Propose to save the save the search.
+view display the list of recommended products according the nutrition grade. Propose to save the save the search.
 Save the search.
 
    
@@ -125,7 +125,7 @@ Save the search.
 - In order to identify the current user to retrieve the history of search. Create a login feature.
 If the user doesn't exist. Create user and save it into database.
 
-## 3.3 Product search history by user
+## 3.5 Product search history by user
 
 - Retrieve the history of search for a logged user and display. 
 
