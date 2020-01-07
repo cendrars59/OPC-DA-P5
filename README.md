@@ -26,7 +26,7 @@ The user then has the possibility to save the result in the database.
 * If the user enters a character that is not a number, the program must repeat the question,
 * The research must be carried out on a MySql database.
 
-# 2. Project structure & settings
+# 2. Project settings
 
 ## 2.1 DataBase
 
@@ -66,7 +66,7 @@ project
 
 ```
 
-## 2.2 Third part software
+## 2.2 Third part software & system
 
 ### 2.2.1 Python version 
 The solution has been developed from 3.7.5 Python version -> see [Release note](https://www.python.org/downloads/release/python-375/)
@@ -79,9 +79,55 @@ In order to access to database from installation. You have to set up the Python 
 The setting of the OpenFoodFacts is required for the application usage. You can find the setting procedure for Python [here](https://github.com/openfoodfacts/openfoodfacts-python)
 See payload configuration section.
 
+### 2.2.3 BeautifulTable
+
+For tables display install BeautifulTable. You can find the setting procedure for [here](https://pypi.org/project/beautifultable/)
+
 ## 2.3 System configuration
----- 
 
-# 3. Using application 
+Mysql command has to be added into your system path. Setting to do according your operating system 
 
-## 3.1 Application initialization
+# 3. Project building tracker 
+
+In this section, we follow the different stages (features)  to complete in order to achieve the solution.  
+
+## 3.1 Database access 
+
+- Design the database schema 
+- Generate the creation script 
+- function to access to the database according the parameters for connection. If the database is not created.
+Creating the database from sql script.
+
+## 3.2 Database feeding 
+
+- By using OpenFactFood API in order to get a JSON file for each, feed master data in the table accordingly.
+
+Categories, 
+Stores,
+Brands.
+
+- By using the experimental Openfactfood, feed the products into the database.
+The payload has to be configured in order to loop up the product for each category.
+
+- During products feeding, feed the associated tables to the product
+
+## 3.3 Product search 
+
+- Display the list of categories 
+- Once a category has been selected, display the list of products into 
+- Once a product has been selected, display the detailed view of the product. on the detailed
+view display the list of recommanded products according the nutrition grade. Propose to save the save the search.
+Save the search.
+
+   
+## 3.4 Login
+
+- In order to identify the current user to retrieve the history of search. Create a login feature.
+If the user doesn't exist. Create user and save it into database.
+
+## 3.3 Product search history by user
+
+- Retrieve the history of search for a logged user and display. 
+
+
+
