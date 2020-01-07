@@ -1,6 +1,7 @@
 # -*- coding: Utf-8 -*
 # file managing the displays related to the products
 
+
 def display_detailed_product(product, recommanded_products):
     """
     Function to display the detailed view of a product

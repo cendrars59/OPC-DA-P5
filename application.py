@@ -11,6 +11,7 @@ from Models import brand
 from Models import store
 from Views import category_view
 from Views import product_view
+from Views import search_view
 
 
 def main():
@@ -82,7 +83,8 @@ def main():
                 view_main_menu = False
 
         if view_search:
-            print(get_user_search(connection, user[0][0]))
+            search_view.display_search(get_user_search(connection, user[0][0]))
+
             decision = input("""
                                 'Type
                                  - f to finish 
@@ -103,7 +105,6 @@ def main():
                 view_main_menu = True
             elif decision == 'f':
                 is_running = False
-
 
         # Display of the list of categories
         if view_categories:
